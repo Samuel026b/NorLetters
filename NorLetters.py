@@ -1,11 +1,14 @@
 import time, sys, requests, re, urllib.parse
 average_values = {"E": 12.94, "R": 8.59, "N": 7.66, "T": 7.60, "A": 7.58, "S": 6.46, "I": 6.41, "L": 5.68, "O": 5.57, "D": 3.75, "K": 3.39, "G": 3.34, "M": 3.04, "F": 2.39, "U": 2.26, "P": 2.13, "B": 2.12, "V": 1.96, "H": 1.81, "C": 1.33, "Y": 0.96, "W": 0.73, "J": 0.71, "Å": 0.61, "Ø": 0.61, "Z": 0.15, "X": 0.13, "Æ": 0.09, "Q": 0.03}
 user_agent_header = {'User-Agent': 'NorLetters - https://github.com/Samuel026B/NorLetters - samuel.brox026@gmail.com'}
-def inName(name, letter):
-  total_letters = 0
-  for letters in name:
-    total_letters += item.number
-  return name.count(letter) / total_letters * 100
+def inName(string, letter):
+    count = 0
+    total_letters = sum(1 for char in string if char.isalpha())
+    for char in string:
+        if char == letter:
+            count += 1
+    percentage = count / total_letters * 100
+    return percentage
 def find_total_occurences():
   total_occurences = 0
   for item in mylist:
@@ -160,7 +163,9 @@ if TYPEofOPERATION in ("FIND_UNUSUAL_SITE", "FUS"):
         if find_total_occurences() < MinLETTERS and (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent):
           BECAUSEtooSHORT = f", because too short ({find_total_occurences()} letters)"
         if inName(list(rpurl)[30:], item.letter) > MAXinNAME and (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent):
-          BECAUSEtooSHORT = f", because too many letters that where found unusual are in the name ({list(rpurl)[30:].count(item.letter)} of )"
+          BECAUSEtooSHORT = f", because too many letters that where found unusual are in the title ({list(rpurl)[30:].count(item.letter)} of {sum(1 for char in string if char.isalpha())} letters)"
+        if inName(list(rpurl)[30:], item.letter) > MAXinNAME and find_total_occurences() < MinLETTERS and (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent):
+          BECAUSEtooSHORT = f", because too short ({find_total_occurences()} letters) and too many letters that where found unusual are in the title ({list(rpurl)[30:].count(item.letter)} of {sum(1 for char in string if char.isalpha())} letters)"
       webscheckd += 1
     mylist = sort_descending(mylist)
     print_result(strange)

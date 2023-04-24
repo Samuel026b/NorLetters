@@ -1,9 +1,14 @@
-import re
+def count_percentage(letter, string):
+    count = 0
+    total_letters = sum(1 for char in string if char.isalpha())
+    for char in string:
+        if char == letter:
+            count += 1
+    percentage = (count / total_letters) * 100
+    return percentage
 
-text = "C\nheck \no\nut \nthis web\nsite\n: url\n=http://web.archive.org/web/20140118090047/http://www.oscars.org/awards/academyawards/legacy/ceremony/61st-winners.html"
-
-pattern = re.compile(r'https?://\S+')
-text_without_url = re.sub(re.compile(r'https?://\S+'), '', text)
-text_without_url = text_without_url.replace("\n", "")
-
-print(text_without_url)
+# Example usage
+string = "!@#Hello World!^"
+letter = "l"
+percentage = count_percentage(letter, string)
+print(f"The letter '{letter}' appears in the string '{string}' {percentage:.2f}% of the time.")
