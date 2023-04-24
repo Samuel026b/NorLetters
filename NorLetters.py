@@ -1,18 +1,26 @@
-import time
-import sys
-import requests
+import time, sys, requests, re, urllib.parse
 average_values = {"E": 12.94, "R": 8.59, "N": 7.66, "T": 7.60, "A": 7.58, "S": 6.46, "I": 6.41, "L": 5.68, "O": 5.57, "D": 3.75, "K": 3.39, "G": 3.34, "M": 3.04, "F": 2.39, "U": 2.26, "P": 2.13, "B": 2.12, "V": 1.96, "H": 1.81, "C": 1.33, "Y": 0.96, "W": 0.73, "J": 0.71, "Å": 0.61, "Ø": 0.61, "Z": 0.15, "X": 0.13, "Æ": 0.09, "Q": 0.03}
 user_agent_header = {'User-Agent': 'NorLetters - https://github.com/Samuel026B/NorLetters - samuel.brox026@gmail.com'}
+def inName(name, letter):
+  total_letters = 0
+  for letters in name:
+    total_letters += item.number
+  return name.count(letter) / total_letters * 100
 def find_total_occurences():
   total_occurences = 0
   for item in mylist:
     total_occurences += item.number
   return total_occurences
 def WebCrawl(random_page_url):
+    random_page_url = urllib.parse.unquote(random_page_url)
     pagestr = f"{random_page_url} "
     random_page_title = random_page_url.split('/')[-1]
     text_json = requests.get(f"https://no.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles={random_page_title}&rvslots=main", headers=user_agent_header).json()
     pages_data = text_json['query']['pages'].values()
+    # re.sub(re.compile(r'https?://\S+'), '', pages_data)
+    # pages_data.replace("\n", "")
+    # pages_data.replace("<ref>", "")
+    # pages_data.replace("<br", "")
     for page_data in pages_data:
         if not 'revisions' in page_data:
             print(f"foobar in {random_page_title}")
@@ -113,8 +121,12 @@ if TYPEofOPERATION in ("FIND_UNUSUAL_SITE", "FUS"):
         raise ValueError("")
       else:
         break
+  if len(sys.argv) > 5:
+    if list(sys.argv[5])[-1] == "%":
+      sys.argv[5] = "".join(list(sys.argv[5])[0:-2])
+    MAXinNAME = float(sys.argv[5])
   print(sys.argv)
-  print(f"[{TYPEofOPERATION}, {DIF}, {NUMBERofRUNS}, {MinLETTERS}]")
+  print(f"TYPEofOPERATION = {TYPEofOPERATION},\nDIF = {DIF},\nNUMBERofRUNS = {NUMBERofRUNS},\nMinLetters = {MinLETTERS},\nMAXinNAME = {MAXinNAME}%.")
   for number in range(NUMBERofRUNS):
     Found = False
     webscheckd = 0
@@ -124,13 +136,13 @@ if TYPEofOPERATION in ("FIND_UNUSUAL_SITE", "FUS"):
         print(rpurl)
         break
       elif webscheckd > 0:
-        if int(list(str(webscheckd - number))[-1]) > 3 or list(str(webscheckd - number))[-1] == "0" or list(str(webscheckd - number))[-1] in ("11", "12", "13"):
+        if int(list(str(webscheckd - number))[-1]) > 3 or list(str(webscheckd - number))[-1] == "0" or str(webscheckd - number) in ("11", "12", "13"):
           print(f"{webscheckd - number}th fail{BECAUSEtooSHORT}. ({rpurl})")
-        if list(str(webscheckd - number))[-1] == "1" and list(str(webscheckd - number))[-1] not in ("11", "12", "13"):
+        if list(str(webscheckd - number))[-1] == "1" and str(webscheckd - number) not in ("11", "12", "13"):
           print(f"{webscheckd - number}st fail{BECAUSEtooSHORT}. ({rpurl})")
-        if list(str(webscheckd - number))[-1] == "2" and list(str(webscheckd - number))[-1] not in ("11", "12", "13"):
+        if list(str(webscheckd - number))[-1] == "2" and str(webscheckd - number) not in ("11", "12", "13"):
           print(f"{webscheckd - number}nd fail{BECAUSEtooSHORT}. ({rpurl})")
-        if list(str(webscheckd - number))[-1] == "3" and list(str(webscheckd - number))[-1] not in ("11", "12", "13"):
+        if list(str(webscheckd - number))[-1] == "3" and str(webscheckd - number) not in ("11", "12", "13"):
           print(f"{webscheckd - number}rd fail{BECAUSEtooSHORT}. ({rpurl})")
       BECAUSEtooSHORT = ""
       mylist = []
@@ -142,11 +154,13 @@ if TYPEofOPERATION in ("FIND_UNUSUAL_SITE", "FUS"):
         BECAUSEtooSHORT = f" and too short ({find_total_occurences()} letters)"
       for item in mylist:
         item.percent = float(f"{item.number / find_total_occurences() * 100:.2f}")
-        if (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent) and find_total_occurences() >= MinLETTERS:
+        if (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent) and find_total_occurences() >= MinLETTERS and inName(list(rpurl)[30:], item.letter) <= MAXinNAME:
           Found = True
           strange.append(item)
         if find_total_occurences() < MinLETTERS and (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent):
           BECAUSEtooSHORT = f", because too short ({find_total_occurences()} letters)"
+        if inName(list(rpurl)[30:], item.letter) > MAXinNAME and (average_values[item.letter] + DIF < item.percent or average_values[item.letter] - DIF > item.percent):
+          BECAUSEtooSHORT = f", because too many letters that where found unusual are in the name ({list(rpurl)[30:].count(item.letter)} of )"
       webscheckd += 1
     mylist = sort_descending(mylist)
     print_result(strange)
