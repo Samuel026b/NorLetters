@@ -17,7 +17,7 @@ def find_total_occurences():
 def WebCrawl(random_page_url):
     random_page_url = urllib.parse.unquote(random_page_url)
     pagestr = f"{random_page_url} "
-    random_page_title = random_page_url.split('/')[-1]
+    random_page_title = random_page_url[30:]
     text_json = requests.get(f"https://no.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles={random_page_title}&rvslots=main", headers=user_agent_header).json()
     pages_data = text_json['query']['pages'].values()
     # re.sub(re.compile(r'https?://\S+'), '', pages_data)
