@@ -281,9 +281,7 @@
 250. https://no.wikipedia.org/wiki/9M14_Malyutka
 251. https://no.wikipedia.org/wiki/Giuseppe_Meazza
 252. https://no.wikipedia.org/wiki/Deadly_Lullabyes_Live
-253. https://no.wikipedia.org/wiki/R/K-seleksjon
-
-foobar in K-seleksjon
+253. https://no.wikipedia.org/wiki/R/K-seleksjon FoobarError
 254. https://no.wikipedia.org/wiki/Amundsen_(film)
 255. https://no.wikipedia.org/wiki/Oxygonia
 256. https://no.wikipedia.org/wiki/Love_Finds_a_Way
@@ -441,9 +439,7 @@ foobar in K-seleksjon
 408. https://no.wikipedia.org/wiki/Spearfish_(Sør-Dakota)
 409. https://no.wikipedia.org/wiki/Kalsitt
 410. https://no.wikipedia.org/wiki/Håkon_Evjenth
-411. https://no.wikipedia.org/wiki/Verdenscupen_i_hurtigløp_på_skøyter_2016/17_–_Verdenscup_1_–_Fellesstart_kvinner
-
-foobar in 17_–_Verdenscup_1_–_Fellesstart_kvinner
+411. https://no.wikipedia.org/wiki/Verdenscupen_i_hurtigløp_på_skøyter_2016/17_–_Verdenscup_1_–_Fellesstart_kvinner FoobarError
 412. https://no.wikipedia.org/wiki/Ricarda_Lisk
 413. https://no.wikipedia.org/wiki/Tårnuglefamilien
 414. https://no.wikipedia.org/wiki/Gar
